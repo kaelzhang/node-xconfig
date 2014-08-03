@@ -33,7 +33,7 @@ var config = require('xconfig')({
 });
 ```
 
-### Enable configurations on ENV
+### Enable Configurations on ENV
 
 app.js:
 
@@ -56,11 +56,12 @@ $ node app.js
 > bar
 ```
 
-### Custom file formats
+### Custom File Codec
 
 config.ini:
 
-```
+```ini
+; some comments
 [user.name]
 family=Swift
 ```
@@ -75,6 +76,20 @@ var config = require('xconfig')({
   file: './config.ini'
 });
 console.log(config.get('user.name.family')); // Swift
+```
+
+### Set and Save Configurations
+
+```js
+config.set('user.name.first', 'Taylor');
+config.save();
+```
+
+config.ini
+```ini
+[user.name]
+first=Taylor
+family=Swift
 ```
 
 ## License
