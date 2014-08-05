@@ -183,5 +183,20 @@ describe("base: _set", function(){
 
 
 describe("config(): sync", function(){
-  
+  it("config.json", function(done){
+    var f = fixture();
+    f.copy(function (err, dir) {
+      expect(err).to.equal(null);
+      var file = f.resolve('config.json');
+      var c = config({
+        file: file
+      });
+      expect(c.get('a')).to.equal(1);
+      c.set('a', 2);
+      expect(c.get('a')).to.equal(2);
+      c.save();
+      expect(require(file).a).to.equal(2);
+      done();
+    });
+  });
 });
