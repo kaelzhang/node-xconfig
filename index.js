@@ -1,14 +1,27 @@
 'use strict';
 
-var config = exports;
+module.exports = config;
 
-var async = require('./lib/async');
-var sync = require('./lib/sync');
+var Async = require('./lib/async');
+var Sync = require('./lib/sync');
 var home = require('home');
 
 
-function async (options) {
-  options || (options = {});
-  options.file = home.resolve(options.file || '~/.xconfig/config.json');
+function config (options) {
+  options = config.overload(options);
+  return new Async(options);
 }
 
+
+// Method to overload options
+config.overload = function (options) {
+  options || (options = {});
+  options.file = home.resolve(options.file || '~/.xconfig/config.json');
+  return options;
+}
+
+
+function async (options, callback) {
+  options = config.overload(options);
+  return new Async(options, callback);
+}
