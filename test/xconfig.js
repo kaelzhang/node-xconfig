@@ -4,6 +4,7 @@ var expect = require('chai').expect;
 var config = require('../');
 var Base = require('../lib/base');
 var fixture = require('test-fixture');
+var fs = require('fs');
 
 describe("base: _get", function(){
   var get = Base.prototype._get;
@@ -196,6 +197,23 @@ describe("config(): sync", function(){
       expect(c.get('a')).to.equal(2);
       c.save();
       expect(require(file).a).to.equal(2);
+      done();
+    });
+  });
+
+  it("config.ini, with guess", function(done){
+    var f = fixture();
+    f.copy(function (err, dir) {
+      expect(err).to.equal(null);
+      var file = f.resolve('config.ini');
+      var c = config({
+        file: file
+      });
+      expect(c.get('a')).to.equal('1');
+      c.set('a', 2);
+      expect(c.get('a')).to.equal(2);
+      c.save();
+      expect(fs.readFileSync(file).toString().replace(/\n/g, '')).to.equal('a=2');
       done();
     });
   });
