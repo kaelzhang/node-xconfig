@@ -27,8 +27,9 @@
     "url": "https://github.com/kaelzhang/node-xconfig/issues"
   },
   "devDependencies": {
+    "chai": "*",
     "mocha": "*",
-    "chai": "*"
+    "test-fixture": "^1.0.1"
   },
   "dependencies": {
     "home": "^0.1.2",
