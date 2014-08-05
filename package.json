@@ -29,5 +29,10 @@
   "devDependencies": {
     "mocha": "*",
     "chai": "*"
+  },
+  "dependencies": {
+    "home": "^0.1.2",
+    "mix2": "^0.1.6",
+    "mkdirp": "^0.5.0"
   }
 }
