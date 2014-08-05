@@ -1,6 +1,8 @@
 'use strict';
 
 module.exports = config;
+config.sync = config;
+config.async = async;
 
 var Async = require('./lib/async');
 var Sync = require('./lib/sync');

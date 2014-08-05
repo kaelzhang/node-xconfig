@@ -1,7 +1,7 @@
 'use strict';
 
 var expect = require('chai').expect;
-var config = require('../');
+var _config = require('../');
 var Base = require('../lib/base');
 var fixture = require('test-fixture');
 var fs = require('fs');
@@ -184,6 +184,7 @@ describe("base: _set", function(){
 
 
 describe("config(): sync", function(){
+  var config = _config;
   it("config.json", function(done){
     var f = fixture();
     f.copy(function (err, dir) {
@@ -273,6 +274,102 @@ describe("config(): sync", function(){
       c.save();
       expect(fs.readFileSync(file).toString().replace(/\n/g, '')).to.equal('a=2');
       done();
+    });
+  });
+});
+
+
+describe("config.async", function(){
+  var config = _config.async;
+  it("config.json", function(done){
+    var f = fixture();
+    f.copy(function (err, dir) {
+      expect(err).to.equal(null);
+      var file = f.resolve('config.json');
+      var c = config({
+        file: file
+      }, function (err) {
+        expect(err).to.equal(null);
+        expect(c.get('a')).to.equal(1);
+        c.set('a', 2);
+        expect(c.get('a')).to.equal(2);
+        c.save(function (err) {
+          expect(err).to.equal(null);
+          expect(require(file).a).to.equal(2);
+          done();
+        });
+      });
+    });
+  });
+
+  it("config.ini, with guess", function(done){
+    var f = fixture();
+    f.copy(function (err, dir) {
+      expect(err).to.equal(null);
+      var file = f.resolve('config.ini');
+      var c = config({
+        file: file
+      }, function (err) {
+        expect(err).to.equal(null);
+        expect(c.get('a')).to.equal('1');
+        c.set('a', 2);
+        expect(c.get('a')).to.equal(2);
+        c.save(function (err) {
+          expect(err).to.equal(null);
+          expect(fs.readFileSync(file).toString().replace(/\n/g, '')).to.equal('a=2');
+          done();
+        });
+      });
+    });
+  });
+
+  it("wrong-type", function(done){
+    var f = fixture();
+    f.copy(function (err, dir) {
+      expect(err).to.equal(null);
+      var file = f.resolve('wrong-type.json');
+      var c = config({
+        file: file
+      }, function (err) {
+        expect(err).not.to.equal(null);
+        done();
+      });
+    });
+  });
+
+  it("wrong type by guess", function(done){
+    var f = fixture();
+    f.copy(function (err, dir) {
+      expect(err).to.equal(null);
+      var file = f.resolve('force-type.json');
+      var c = config({
+        file: file
+      }, function (err) {
+        expect(err).not.to.equal(null);
+        done();
+      });
+    });
+  });
+
+  it("force type", function(done){
+    var f = fixture();
+    f.copy(function (err, dir) {
+      expect(err).to.equal(null);
+      var file = f.resolve('force-type.json');
+      var c = config({
+        file: file,
+        codec: 'ini'
+      }, function (err) {
+        expect(err).to.equal(null);
+        expect(c.get('a')).to.equal('1');
+        c.set('a', 2);
+        expect(c.get('a')).to.equal(2);
+        c.save(function (err) {
+          expect(err).to.equal(null);
+          expect(fs.readFileSync(file).toString().replace(/\n/g, '')).to.equal('a=2');
+          done();
+        });
+      });
     });
   });
 });
