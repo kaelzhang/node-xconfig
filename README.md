@@ -33,34 +33,11 @@ var config = require('xconfig')({
 });
 ```
 
-### Enable Configurations on ENV
-
-app.js:
-
-```js
-var config = require('xconfig')({
-  enableEnv: true,
-  envPrefix: 'BLAH_'
-});
-var username = config.get('username');
-console.log(username);
-```
-
-Command-line:
-
-```
-$ node app.js
-> foo
-$ export BLAH_USERNAME=bar
-$ node app.js
-> bar
-```
 
 ### Custom File Codec
 
-config.ini:
-
 ```ini
+; config.ini
 ; some comments
 [user.name]
 family=Swift
@@ -78,6 +55,25 @@ var config = require('xconfig')({
 console.log(config.get('user.name.family')); // Swift
 ```
 
+The code above is equivalent to:
+
+```js
+var config = require('xconfig')({
+  codec: 'ini',
+  file: './config.ini'
+});
+console.log(config.get('user.name.family')); // Swift
+```
+for `'ini'` is a built codec.
+
+And `xconfig` will try to guess the codec by extension name, so, you can just:
+```js
+var config = require('xconfig')({
+  file: './config.ini'
+});
+console.log(config.get('user.name.family')); // Swift
+```
+
 ### Set and Save Configurations
 
 ```js
@@ -90,6 +86,27 @@ config.ini
 [user.name]
 first=Taylor
 family=Swift
+```
+
+### Async Xconfig
+
+```js
+require('xconfig').async({
+  file: './config.ini'
+}, function(err){
+  if (err){
+    console.error(err);
+    return;
+  }
+
+  this.get('user.name.family'); // 'Swift';
+  this.set('user.name.first', 'Taylor');
+  this.save(function(err){
+    if (err){
+      console.error('error saving', err);
+    }
+  });
+});
 ```
 
 ## License
