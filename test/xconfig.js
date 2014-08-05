@@ -217,4 +217,62 @@ describe("config(): sync", function(){
       done();
     });
   });
+
+  it("wrong-type", function(done){
+    var f = fixture();
+    f.copy(function (err, dir) {
+      expect(err).to.equal(null);
+      var file = f.resolve('wrong-type.json');
+      var c;
+
+      try {
+        c = config({
+          file: file
+        });
+      } catch(e) {
+        return done();
+      }
+      
+      expect('should be errors').to.equal(false);
+      done();
+    });
+  });
+
+  it("wrong type by guess", function(done){
+    var f = fixture();
+    f.copy(function (err, dir) {
+      expect(err).to.equal(null);
+      var file = f.resolve('force-type.json');
+      var c;
+
+      try {
+        c = config({
+          file: file
+        });
+      } catch(e) {
+        return done();
+      }
+      
+      expect('should be errors').to.equal(false);
+      done();
+    });
+  });
+
+  it("force type", function(done){
+    var f = fixture();
+    f.copy(function (err, dir) {
+      expect(err).to.equal(null);
+      var file = f.resolve('force-type.json');
+      var c = config({
+        file: file,
+        codec: 'ini'
+      });
+      expect(c.get('a')).to.equal('1');
+      c.set('a', 2);
+      expect(c.get('a')).to.equal(2);
+      c.save();
+      expect(fs.readFileSync(file).toString().replace(/\n/g, '')).to.equal('a=2');
+      done();
+    });
+  });
 });
