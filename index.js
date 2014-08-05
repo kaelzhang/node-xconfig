@@ -9,7 +9,7 @@ var home = require('home');
 
 function config (options) {
   options = config.overload(options);
-  return new Async(options);
+  return new Sync(options);
 }
 
 
