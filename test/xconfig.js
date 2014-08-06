@@ -183,6 +183,55 @@ describe("base: _set", function(){
 });
 
 
+describe("base: _remove(data, keys)", function(){
+  var remove = Base.prototype._remove;
+  it("normal", function(){
+    var data = {
+      a: 1
+    };
+    remove(data, ['a']);
+    expect(data.a).to.equal();
+  });
+
+  it("namespaces", function(){
+    var data = {
+      a: {
+        b: 1,
+        c: 2
+      }
+    };
+
+    remove(data, ['a', 'b']);
+    expect(data.a.b).to.equal();
+    expect(data.a.c).to.equal(2);
+  });
+
+  it("if a property is not defined", function(){
+    var data = {
+      a: {
+        b: 2,
+        c: {
+          d: 3
+        }
+      }
+    };
+
+    // not found
+    remove(data, ['a', 'b', 'c']);
+    remove(data, ['a', 'd']);
+    remove(data, ['a', 'c', 'd', 'e']);
+    expect(data).to.deep.equal({
+      a: {
+        b: 2,
+        c: {
+          d: 3
+        }
+      }
+    });
+  });
+});
+
+
 describe("config(): sync", function(){
   var config = _config;
   it("config.json", function(done){
