@@ -109,6 +109,16 @@ require('xconfig').async({
 });
 ```
 
+## Programmatical API
+
+### xconfig(options)
+
+Option | Type    | Default Value | Description
+------ | ------- | ------------- | ------------
+file   | `path`  | '~/.xconfig/config.json' | 
+codec  | `String|Object` | `'json'` | Format of config file, available value `'ini'` and `'json'`. Or an object contains both two methods of `parse(string)` and `stringify(object)`
+
+
 ## License
 
 May be freely distributed under the [MIT license](https://raw.githubusercontent.com/kaelzhang/node-xconfig/master/LICENSE-MIT).
