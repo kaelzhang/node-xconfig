@@ -1,6 +1,6 @@
 {
   "name": "xconfig",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "X flexible Configurations for Nodejs",
   "main": "index.js",
   "scripts": {
@@ -32,6 +32,7 @@
     "test-fixture": "^1.0.1"
   },
   "dependencies": {
+    "cobj": "^0.1.1",
     "home": "^0.1.2",
     "ini": "^1.2.1",
     "mix2": "^0.1.6",

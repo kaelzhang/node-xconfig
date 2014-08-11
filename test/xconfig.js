@@ -136,6 +136,9 @@ describe("config(): sync", function(){
       expect(c.get('a')).to.equal(2);
       c.save();
       expect(fs.readFileSync(file).toString().replace(/\n/g, '')).to.equal('a=2');
+
+      c.save({a: 3});
+      expect(fs.readFileSync(file).toString().replace(/\n/g, '')).to.equal('a=3');
       done();
     });
   });
@@ -238,7 +241,13 @@ describe("config.async", function(){
         c.save(function (err) {
           expect(err).to.equal(null);
           expect(fs.readFileSync(file).toString().replace(/\n/g, '')).to.equal('a=2');
-          done();
+
+          // overload
+          c.save({a: 3}, function (err) {
+            expect(err).to.equal(null);
+            expect(fs.readFileSync(file).toString().replace(/\n/g, '')).to.equal('a=3');
+            done();
+          });
         });
       });
     });
